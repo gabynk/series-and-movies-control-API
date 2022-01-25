@@ -1,0 +1,8 @@
+node_modules
+yarn-error.log
+
+dist/
+coverage
+.env
+docker.env
+ormconfig.json
