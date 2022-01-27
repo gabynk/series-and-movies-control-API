@@ -1,8 +1,11 @@
+import { hash } from "bcryptjs";
 import { inject, injectable } from "tsyringe";
+
+import { UserMap } from "../../mapper/UserMap";
 import { AppError } from "../../../../shared/errors/AppError";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
-import { User } from "../../infra/typeorm/entities/User";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
+import { IUserResponseDTO } from "../../dtos/IUserResponseDTO";
 
 @injectable()
 class CreateUserUseCase {
@@ -11,20 +14,22 @@ class CreateUserUseCase {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute({ name, email, password }: ICreateUserDTO): Promise<User> {
+  async execute({ name, email, password }: ICreateUserDTO): Promise<IUserResponseDTO> {
     const alreadyExist = await this.usersRepository.findByEmail(email);
 
     if (alreadyExist) {
       throw new AppError("User already exists");
     }
 
+    const passwordHash = await hash(password, 8);
+
     const user = await this.usersRepository.create({
       name,
       email,
-      password
+      password: passwordHash
     });
 
-    return user;
+    return UserMap.toDTO(user);
    }
 }
 

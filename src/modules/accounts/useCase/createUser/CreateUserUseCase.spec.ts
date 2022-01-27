@@ -2,13 +2,13 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { UsersRepositoryInMemory } from "../../repositories/in-memory/UsersRepositoryInMemory";
 import { CreateUserUseCase } from "./CreateUserUseCase";
 
-let usersRepository: UsersRepositoryInMemory
+let usersRepositoryInMemory: UsersRepositoryInMemory
 let createUserUseCase: CreateUserUseCase
 
 describe("Create User", () => {
   beforeEach(() => {
-    usersRepository = new UsersRepositoryInMemory()
-    createUserUseCase = new CreateUserUseCase(usersRepository)
+    usersRepositoryInMemory = new UsersRepositoryInMemory()
+    createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory)
   });
 
   it("should be able to create new user", async () => {

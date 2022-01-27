@@ -3,7 +3,6 @@ import { Connection } from "typeorm";
 
 import createConnection from "../../../../database/typeorm";
 import { app } from "../../../../shared/http/app";
-import { AppError } from "../../../../shared/errors/AppError";
 
 let connection: Connection;
 

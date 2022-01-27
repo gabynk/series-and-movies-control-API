@@ -12,7 +12,7 @@
     "/users": {
       "post": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Create new user",
         "requestBody": {
@@ -56,6 +56,50 @@
           }
         }
       }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Authentication user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johnduo@example.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/schemas/AuthenticateUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not exists"
+          }
+        }
+      }
     }
   },
   "schemas": {
@@ -82,9 +126,38 @@
         "id": "d3d7eedf-c183-400e-8197-ad01430b0e61",
         "name": "John Duo",
         "email": "johnduo@example.com",
-        "admin": false,
-        "created_at": "2021-09-26T18:20:55.699Z",
-        "updated_at": "2021-09-26T18:20:55.699Z"
+        "created_at": "2022-01-25T15:13:02.799Z",
+        "updated_at": "2022-01-25T15:13:02.799Z"
+      }
+    },
+    "AuthenticateUser": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "user": {
+          "name": "Teste 2",
+          "email": "user2@test.com"
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMyNDk0MTksImV4cCI6MTY0MzI1MDMxOSwic3ViIjoiYjVjM2FjNjItNGE1Yy00YmVjLWEwMWItZmJiNjc2Yzk0Y2VjIn0.8uu0g7piVd6vOWHexvIgEYT5MIVAd9-gy_lljy9j0yk",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIyQHRlc3QuY29tIiwiaWF0IjoxNjQzMjQ5NDE5LCJleHAiOjE2NDU4NDE0MTksInN1YiI6ImI1YzNhYzYyLTRhNWMtNGJlYy1hMDFiLWZiYjY3NmM5NGNlYyJ9.N-iaFz7TVtzTLbnYKzw52SR0w0m2bu7Km9IUOSeJ3Rc"
       }
     }
   }
