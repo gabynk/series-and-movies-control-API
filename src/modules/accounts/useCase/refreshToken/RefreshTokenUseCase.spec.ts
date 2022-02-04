@@ -3,15 +3,17 @@ import { UsersRepositoryInMemory } from "../../../../modules/accounts/repositori
 import { UsersTokenRepositoryInMemory } from "../../../../modules/accounts/repositories/in-memory/UsersTokenRepositoryInMemory";
 import { DayjsDateProvider } from "../../../../shared/container/providers/DateProvider/implementations/DayjsDateProvider";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
-import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
+import { AuthenticateUserUseCase } from "../authenticateUser/AuthenticateUserUseCase";
+import { RefreshTokenUseCase } from "./RefreshTokenUseCase";
 
+let refreshTokenUseCase: RefreshTokenUseCase
 let authenticateUserUseCase: AuthenticateUserUseCase
 let createUserUseCase: CreateUserUseCase
 let usersTokenRepositoryInMemory: UsersTokenRepositoryInMemory
 let usersRepositoryInMemory: UsersRepositoryInMemory
 let dateProvider: DayjsDateProvider
 
-describe("Authenticate User", () => {
+describe("Refresh Authenticate User", () => {
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory()
     usersTokenRepositoryInMemory = new UsersTokenRepositoryInMemory()
@@ -23,9 +25,13 @@ describe("Authenticate User", () => {
       dateProvider,
       usersTokenRepositoryInMemory
     )
+    refreshTokenUseCase = new RefreshTokenUseCase(
+      usersTokenRepositoryInMemory,
+      dateProvider,
+    )
   })
 
-  it("should be able to authenticate user", async () => {
+  it("should be able to refresh token", async () => {
     const user = {
       name: 'test user',
       email: 'user@test.com',
@@ -39,10 +45,13 @@ describe("Authenticate User", () => {
       password: user.password
     })
 
-    expect(authenticatedUser).toHaveProperty("token")
+    const refreshAuthenticated = await refreshTokenUseCase.execute(authenticatedUser.refresh_token)
+
+    expect(refreshAuthenticated).toHaveProperty("token")
+    expect(refreshAuthenticated).toHaveProperty("refresh_token")
   })
 
-  it("should not be able to authenticate if user not existe", async () => {
+  it("should not be able to refresh token if token is incorrect", async () => {
     expect(async () => {
       const user = {
         name: 'test user',
@@ -51,26 +60,13 @@ describe("Authenticate User", () => {
       }
 
       await createUserUseCase.execute(user)
-      await authenticateUserUseCase.execute({
-        email: 'notExist@test.com',
-        password: '123'
-      })
-    }).rejects.toEqual(new AppError("Email or password incorrect"))
-  })
 
-  it("should not be able to authenticate if password is incorrect", async () => {
-    expect(async () => {
-      const user = {
-        name: 'test user',
-        email: 'user@test.com',
-        password: '123456'
-      }
-
-      await createUserUseCase.execute(user)
-      await authenticateUserUseCase.execute({
+      const authenticatedUser = await authenticateUserUseCase.execute({
         email: user.email,
-        password: '123'
+        password: user.password
       })
-    }).rejects.toEqual(new AppError("Email or password incorrect"))
+
+      await refreshTokenUseCase.execute(authenticatedUser.token)
+    }).rejects.toEqual(new AppError("Refresh Token does not exists"))
   })
 })

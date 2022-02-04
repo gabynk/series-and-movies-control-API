@@ -44,7 +44,7 @@ class AuthenticateUserUseCase {
     } = authTokens;
 
     if (!existUser)
-      throw new AppError("User not exists");
+      throw new AppError("Email or password incorrect");
 
     const passwordMatch = await compare(password, existUser.password)
 
