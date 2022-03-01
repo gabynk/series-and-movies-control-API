@@ -42,6 +42,13 @@ class MoviesRepository implements IMoviesRepository {
   async findByTitle(title: string): Promise<Movies> {
     return this.repository.findOne({ title });
   }
+
+  async listAll(user_id: string): Promise<Movies[]> {
+    return this.repository
+    .createQueryBuilder("movies")
+    .where("movies.user_id = :user_id", { user_id: user_id })
+    .getMany();
+  }
 }
 
 export { MoviesRepository }

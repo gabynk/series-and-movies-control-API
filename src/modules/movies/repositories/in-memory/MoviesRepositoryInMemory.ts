@@ -40,6 +40,12 @@ class MoviesRepositoryInMemory implements IMoviesRepository {
   async findByTitle(title: string): Promise<Movies> {
     return this.movies.find((movie) => movie.title === title);
   }
+
+  async listAll(user_id: string): Promise<Movies[]> {
+    const list = this.movies.filter((movie) => movie.user_id === user_id);
+
+    return list;
+  }
 }
 
 export { MoviesRepositoryInMemory }
