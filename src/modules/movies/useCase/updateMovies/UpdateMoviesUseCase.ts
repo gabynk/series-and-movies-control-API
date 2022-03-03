@@ -19,6 +19,14 @@ class UpdateMoviesUseCase {
       throw new AppError("Movie not exists");
     }
 
+    if (existMovie.title !== data.title) {
+      const alreadyExistsTitle = await this.moviesRepository.findByTitle(data.title);
+
+      if (alreadyExistsTitle) {
+        throw new AppError("Movie title already exists")
+      }
+    }
+
     const createMovies = await this.moviesRepository.update(data)
 
     return createMovies;

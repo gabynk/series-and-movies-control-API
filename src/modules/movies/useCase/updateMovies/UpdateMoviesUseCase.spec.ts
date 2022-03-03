@@ -72,4 +72,49 @@ describe("Update Movies", () => {
       })
     }).rejects.toEqual(new AppError("Movie not exists"))
   })
+
+  it("should not be able to update movie if already exists same title", async () => {
+    expect(async () => {
+      const user = {
+        name: 'test user',
+        email: 'user@test.com',
+        password: '123456'
+      }
+
+      const createUser = await createUserUseCase.execute(user)
+
+      const createMovie = await createMoviesUseCase.execute({
+        user_id: createUser.id,
+        title: 'test title',
+        duration: 60,
+        summary: 'test summary',
+        genre: 'test genre',
+        episode: 'test ep',
+        rating: 'test rating',
+        watched: false,
+        watched_at: new Date,
+        release_at: new Date,
+      })
+
+      await createMoviesUseCase.execute({
+        user_id: createUser.id,
+        title: 'test title 2',
+        duration: 60,
+        summary: 'test summary',
+        genre: 'test genre',
+        episode: 'test ep',
+        rating: 'test rating',
+        watched: false,
+        watched_at: new Date,
+        release_at: new Date,
+      })
+
+      await updateMoviesUseCase.execute({
+        user_id: createUser.id,
+        movie_id: createMovie.id,
+        title: 'test title 2',
+        watched: true,
+      })
+    }).rejects.toEqual(new AppError("Movie title already exists"))
+  })
 })
