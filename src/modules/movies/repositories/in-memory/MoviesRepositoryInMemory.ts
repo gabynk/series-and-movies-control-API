@@ -1,6 +1,7 @@
 import { IUpdateMoviesDTO } from "../../../../modules/movies/dtos/IUpdateMoviesDTO";
 import { ICreateMoviesDTO } from "../../../../modules/movies/dtos/ICreateMoviesDTO";
 import { Movies } from "../../../../modules/movies/infra/typeorm/entities/Movies";
+import { IListFilteredMoviesDTO } from "../../../../modules/movies/dtos/IListFilteredMoviesDTO";
 import { IMoviesRepository } from "../IMoviesRepository";
 
 class MoviesRepositoryInMemory implements IMoviesRepository {
@@ -64,6 +65,22 @@ class MoviesRepositoryInMemory implements IMoviesRepository {
     })
 
     return this.movies.find((movie) => movie.user_id === data.user_id);
+  }
+
+  async listFiltered({
+    user_id,
+    title,
+    genre,
+    rating,
+    watched
+  }: IListFilteredMoviesDTO): Promise<Movies[]> {
+    const list = this.movies.filter((movie) => movie.user_id === user_id && (
+      title && movie.title === title ||
+      genre && movie.genre === genre ||
+      rating && movie.rating === rating ||
+      watched && movie.watched === watched));
+
+    return list;
   }
 }
 

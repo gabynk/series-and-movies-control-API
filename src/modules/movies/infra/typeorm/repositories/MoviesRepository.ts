@@ -3,6 +3,7 @@ import { getRepository, Repository } from "typeorm";
 import { ICreateMoviesDTO } from "../../../../../modules/movies/dtos/ICreateMoviesDTO";
 import { IMoviesRepository } from "../../../../../modules/movies/repositories/IMoviesRepository";
 import { IUpdateMoviesDTO } from "../../../../../modules/movies/dtos/IUpdateMoviesDTO";
+import { IListFilteredMoviesDTO } from "../../../../../modules/movies/dtos/IListFilteredMoviesDTO";
 import { Movies } from "../entities/Movies";
 
 class MoviesRepository implements IMoviesRepository {
@@ -64,7 +65,39 @@ class MoviesRepository implements IMoviesRepository {
     delete data.movie_id
     updateData = { ...updateData, ...data }
 
-    return this.repository.save({...alredyExist, ...updateData});
+    return this.repository.save({ ...alredyExist, ...updateData });
+  }
+
+  async listFiltered({
+    user_id,
+    title,
+    genre,
+    rating,
+    watched
+  }: IListFilteredMoviesDTO): Promise<Movies[]> {
+    const moviesQuery = this.repository
+      .createQueryBuilder("movie")
+      .where("user_id = :user_id", { user_id });
+
+    if (title) {
+      moviesQuery.andWhere("title = :title", { title });
+    }
+
+    if (genre) {
+      moviesQuery.andWhere("genre = :genre", { genre });
+    }
+
+    if (rating) {
+      moviesQuery.andWhere("rating = :rating", { rating });
+    }
+
+    if (watched) {
+      moviesQuery.andWhere("watched = :watched", { watched });
+    }
+
+    const movies = await moviesQuery.getMany();
+
+    return movies;
   }
 }
 

@@ -1,4 +1,4 @@
-interface IListMoviesDTO {
+interface IListFilteredMoviesDTO {
   user_id: string;
   title?: string;
   genre?: string;
@@ -6,4 +6,4 @@ interface IListMoviesDTO {
   watched?: boolean;
 }
 
-export { IListMoviesDTO }
+export { IListFilteredMoviesDTO }
