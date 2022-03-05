@@ -1,4 +1,5 @@
 import { getRepository, Repository } from "typeorm";
+import { IUserDTO } from "../../../dtos/IUserDTO";
 import { ICreateUserDTO } from "../../../dtos/ICreateUserDTO";
 import { IUsersRepository } from "../../../repositories/IUsersRepository";
 import { User } from "../entities/User";
@@ -30,6 +31,14 @@ class UsersRepository implements IUsersRepository {
 
   async findByEmail(email: string): Promise<User> {
     return this.repository.findOne({ email })
+  }
+
+  async update(data: IUserDTO): Promise<User> {
+    const alredyExist = this.findById(data.id);
+
+    await this.repository.save({ ...alredyExist, ...data });
+
+    return this.findById(data.id)
   }
 }
 
