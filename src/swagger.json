@@ -57,6 +57,65 @@
         }
       }
     },
+    "/users/update": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Duo",
+                  "email": "johnduo2@example.com",
+                  "password": "123456",
+                  "newPassword": "123123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/schemas/User"
+                }
+              }
+            }
+          },
+          "400": [
+            {
+              "description": "Email already exists"
+            },
+            {
+              "description": "Password incorrect"
+            }
+          ]
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [
@@ -97,6 +156,276 @@
           },
           "400": {
             "description": "User not exists"
+          }
+        }
+      }
+    },
+    "/refresh-token/:token": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Refresh token user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/schemas/AuthenticateUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Refresh Token does not exists"
+          }
+        }
+      }
+    },
+    "/movies": {
+      "post": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Create movie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "duration": {
+                    "type": "number"
+                  },
+                  "summary": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "episode": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "string"
+                  },
+                  "watched": {
+                    "type": "boolean"
+                  },
+                  "watched_at": {
+                    "type": "Date"
+                  },
+                  "release_at": {
+                    "type": "Date"
+                  }
+                },
+                "example": {
+                  "title": "movie",
+                  "duration": 60,
+                  "summary": "movie summary",
+                  "genre": "movie genre",
+                  "episode": "movie episode",
+                  "rating": "movie rating",
+                  "watched": false,
+                  "watched_at": "2022-03-01",
+                  "release_at": "2022-03-01"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/schemas/Movie"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Movie already exists"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Get all movies",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": [
+                    "#/schemas/Movie"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/update": {
+      "put": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Update a movie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "movie_id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "duration": {
+                    "type": "number"
+                  },
+                  "summary": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "episode": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "string"
+                  },
+                  "watched": {
+                    "type": "boolean"
+                  },
+                  "watched_at": {
+                    "type": "Date"
+                  },
+                  "release_at": {
+                    "type": "Date"
+                  }
+                },
+                "example": {
+                  "movie_id": "a8b26f8d-2ed8-4455-b78d-423229e24137",
+                  "title": "movie",
+                  "duration": 60,
+                  "summary": "movie summary",
+                  "genre": "movie genre",
+                  "episode": "movie episode",
+                  "rating": "movie rating",
+                  "watched": false,
+                  "watched_at": "2022-03-01",
+                  "release_at": "2022-03-01"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/schemas/Movie"
+                }
+              }
+            }
+          },
+          "400": [
+            {
+              "description": "Movie not exists"
+            },
+            {
+              "description": "Movie title already exists"
+            }
+          ]
+        }
+      }
+    },
+    "/movies/filter": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "summary": "Filter movie list",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "string"
+                  },
+                  "watched": {
+                    "type": "boolean"
+                  }
+                },
+                "example": {
+                  "title": "movie",
+                  "genre": "movie genre",
+                  "rating": "movie rating",
+                  "watched": false
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": ["#/schemas/Movie"]
+                }
+              }
+            }
           }
         }
       }
@@ -158,6 +487,74 @@
         },
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMyNDk0MTksImV4cCI6MTY0MzI1MDMxOSwic3ViIjoiYjVjM2FjNjItNGE1Yy00YmVjLWEwMWItZmJiNjc2Yzk0Y2VjIn0.8uu0g7piVd6vOWHexvIgEYT5MIVAd9-gy_lljy9j0yk",
         "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIyQHRlc3QuY29tIiwiaWF0IjoxNjQzMjQ5NDE5LCJleHAiOjE2NDU4NDE0MTksInN1YiI6ImI1YzNhYzYyLTRhNWMtNGJlYy1hMDFiLWZiYjY3NmM5NGNlYyJ9.N-iaFz7TVtzTLbnYKzw52SR0w0m2bu7Km9IUOSeJ3Rc"
+      }
+    },
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "genre": {
+          "type": "string"
+        },
+        "episode": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "string"
+        },
+        "watched": {
+          "type": "string"
+        },
+        "watched_at": {
+          "type": "string"
+        },
+        "release_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "id": "a8b26f8d-2ed8-4455-b78d-423229e24137",
+        "user_id": "c02562ba-74e6-4073-83e7-047d39e3fe71",
+        "title": "the 100",
+        "duration": "60",
+        "summary": "war",
+        "genre": "war",
+        "episode": null,
+        "rating": null,
+        "watched": false,
+        "watched_at": null,
+        "release_at": null,
+        "created_at": "2022-03-01T15:27:56.871Z",
+        "updated_at": "2022-03-01T15:27:56.871Z"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

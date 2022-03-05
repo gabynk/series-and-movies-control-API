@@ -9,6 +9,6 @@ const createUserController = new CreateUserController();
 const updateUserController = new UpdateUserController();
 
 usersRoutes.post("/", createUserController.handle);
-usersRoutes.post("/update", verifyAuthentication, updateUserController.handle);
+usersRoutes.put("/update", verifyAuthentication, updateUserController.handle);
 
 export { usersRoutes };

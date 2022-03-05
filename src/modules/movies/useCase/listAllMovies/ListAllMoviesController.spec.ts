@@ -50,7 +50,7 @@ describe("List All Movies Controller", () => {
         Authorization: `Bearer ${tokens.body.token}`,
       })
 
-    expect(listMovie.status).toBe(201)
+    expect(listMovie.status).toBe(200)
     expect(listMovie.body[0]).toHaveProperty("id")
     expect(listMovie.body).toHaveLength(1)
   })

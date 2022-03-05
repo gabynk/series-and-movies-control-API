@@ -28,7 +28,7 @@ describe("Update User Controller", () => {
       .send({ email: "test@email.com", password: "123456" })
 
     const uptadeUser = await request(app)
-      .post("/users/update")
+      .put("/users/update")
       .send({
         email: 'test@user.com',
         password: '123456',
@@ -53,7 +53,7 @@ describe("Update User Controller", () => {
       .send({ email: "test@email.com", password: "123456" })
 
     const uptadeUser = await request(app)
-      .post("/users/update")
+      .put("/users/update")
       .send({
         password: '654321',
         newPassword: '654321'

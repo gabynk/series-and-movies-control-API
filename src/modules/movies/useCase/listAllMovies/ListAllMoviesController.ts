@@ -10,7 +10,7 @@ class ListAllMoviesController {
 
     const movie = await listAllMoviesUseCase.execute(id);
 
-    return response.status(201).json(movie);
+    return response.status(200).json(movie);
   }
 }
 
